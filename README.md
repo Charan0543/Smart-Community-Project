@@ -1,6 +1,6 @@
-# Smart-Community-Project
+# Smart-Community-Governance-Project
 
-The Smart Community Management System (SCMS) is a digital platform designed to help residential communities manage daily activities efficiently. It allows residents and administrators to communicate, report issues, and manage community resources in a structured way.
+The Smart Community Governance System is a digital platform designed to help residential communities manage daily activities efficiently. It allows residents and administrators to communicate, report issues, and manage community resources in a structured way.
 
 ## Features
 - Complaint registration and tracking
@@ -11,10 +11,10 @@ The Smart Community Management System (SCMS) is a digital platform designed to h
 - Role-based access control (Super Admin, Admin, Resident)
 
 ## Technologies Used
-- Frontend: Web-based interface
-- Backend: Server-side application
-- Database: Community data storage
-- Authentication: Secure login system
+- Frontend: HTML,CSS,JavaScript(Web-based interface)
+- Backend: Node.js and Express.js(Server-side application)
+- Database: SQLite3(Community data storage)
+- Authentication: JWT Authentication(Secure login system)
 
 ## Benefits
 - Faster complaint resolution
