@@ -1,0 +1,143 @@
+{
+    "users": [
+        {
+            "id": "usr-dev",
+            "name": "Super Admin",
+            "email": "admin@example.com",
+            "phone": "555-5555",
+            "flat": "Office 01",
+            "password": "123",
+            "role": "superadmin",
+            "status": "approved",
+            "communityCode": "SMART2026"
+        },
+        {
+            "id": "usr-1776104504407",
+            "name": "charan",
+            "email": "charanchowdary067@gmail.com",
+            "phone": "6304204003",
+            "flat": null,
+            "password": "1234",
+            "role": "superadmin",
+            "status": "approved",
+            "communityCode": "1234"
+        },
+        {
+            "id": "req-1776104565705",
+            "name": "sneha",
+            "email": "snehabaari@gmail.com",
+            "phone": "7893375081",
+            "flat": null,
+            "password": "1234",
+            "role": "admin",
+            "status": "approved",
+            "communityCode": "1234"
+        },
+        {
+            "id": "req-1776104657653",
+            "name": "harsha",
+            "email": "ambakantiharshavardhan54@gmail.com",
+            "phone": "6281265664",
+            "flat": "A-1901",
+            "password": "1234",
+            "role": "resident",
+            "status": "approved",
+            "communityCode": "1234"
+        }
+    ],
+    "communities": [
+        "SMART2026",
+        "1234"
+    ],
+    "complaints": [
+        {
+            "id": "CMP002",
+            "name": "harsha",
+            "flat": "A-101",
+            "category": "General",
+            "title": "Resident Report",
+            "desc": "Electricity problem",
+            "status": "Pending",
+            "date": "2026-04-14",
+            "timestamp": 1776197858961,
+            "votes": 0,
+            "votedBy": [],
+            "responses": [],
+            "communityCode": "1234"
+        },
+        {
+            "id": "CMP001",
+            "name": "harsha",
+            "flat": "A-101",
+            "category": "General",
+            "title": "Resident Report",
+            "desc": "water problem",
+            "status": "Resolved",
+            "date": "2026-04-13",
+            "timestamp": 1776107832853,
+            "votes": 0,
+            "votedBy": [],
+            "responses": [
+                {
+                    "adminName": "charan",
+                    "text": "okay",
+                    "date": "00:47:52"
+                }
+            ],
+            "communityCode": "1234"
+        }
+    ],
+    "events": [
+        {
+            "id": 1,
+            "name": "Community Festival Celebration",
+            "date": "2026-04-16",
+            "time": "06:00",
+            "location": "community hall",
+            "desc": "Join us for an evening full of fun, cultural performances, music, and delicious food. All residents are invited to participate and enjoy together.",
+            "showRegBtn": true,
+            "communityCode": "1234",
+            "timestamp": 1776107028925
+        }
+    ],
+    "announcements": [
+        {
+            "id": 1,
+            "title": " Annual General Meeting (AGM)",
+            "desc": "All residents are requested to attend the Annual General Meeting at the community hall to discuss important updates, budgets, and future plans.",
+            "date": "2026-04-13",
+            "communityCode": "1234",
+            "timestamp": 1776106334982
+        }
+    ],
+    "alerts": [
+        {
+            "type": "fire",
+            "title": "EMERGENCY ALERT",
+            "time": "Just now",
+            "desc": "danger",
+            "communityCode": "1234",
+            "timestamp": 1778424624204
+        },
+        {
+            "type": "fire",
+            "title": "EMERGENCY ALERT",
+            "time": "Just now",
+            "desc": "danger",
+            "communityCode": "1234",
+            "timestamp": 1776107049770
+        }
+    ],
+    "eventRegistrations": [
+        {
+            "id": 1776197975596,
+            "eventId": 1,
+            "eventName": "Community Festival Celebration",
+            "residentName": "harsha",
+            "flatNumber": "Unknown",
+            "date": "2026-04-14",
+            "communityCode": "1234",
+            "timestamp": 1776197975605
+        }
+    ]
+}

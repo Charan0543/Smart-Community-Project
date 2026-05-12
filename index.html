@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Community Governance System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container"></div>
+
+    <!-- AUTH: LANDING SCREEN -->
+    <div id="auth-landing-screen" class="screen full-page active">
+        <div class="glass-panel text-center">
+            <div class="logo-container">
+                <i class="fa-solid fa-city fa-3x text-primary"></i>
+            </div>
+            <h2>Smart Community</h2>
+            <p class="subtitle mb-4">Governance System</p>
+            <button class="btn btn-primary btn-lg w-100 mb-3" onclick="app.authNavigate('auth-login-screen')">
+                <i class="fa-solid fa-right-to-bracket me-2"></i> Login
+            </button>
+            <button class="btn btn-outline btn-lg w-100" onclick="app.authNavigate('auth-role-screen')">
+                <i class="fa-solid fa-user-plus me-2"></i> Register
+            </button>
+        </div>
+    </div>
+
+    <!-- AUTH: LOGIN SCREEN -->
+    <div id="auth-login-screen" class="screen full-page hidden">
+        <div class="glass-panel text-center">
+            <button class="back-btn" onclick="app.authNavigate('auth-landing-screen')">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <h3 class="mt-3">User Login</h3>
+            <p class="subtitle mb-4">Enter your registered email</p>
+            <form id="login-form" onsubmit="app.handleLogin(event)">
+                <div class="form-group mb-3 text-start">
+                    <label>Email Address</label>
+                    <input type="email" id="login-email" class="form-control" required>
+                </div>
+                <div class="form-group mb-4 text-start">
+                    <label>Password</label>
+                    <input type="password" id="login-password" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- AUTH: ROLE SELECTION -->
+    <div id="auth-role-screen" class="screen full-page hidden">
+        <div class="glass-panel text-center">
+            <button class="back-btn" onclick="app.authNavigate('auth-landing-screen')">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <h3 class="mt-3 mb-4">I am registering as a...</h3>
+            <div class="role-buttons">
+                <button class="btn btn-primary btn-lg w-100 mb-3 role-btn" onclick="app.setRegisterRole('admin')">
+                    <i class="fa-solid fa-user-shield me-2"></i> Administrator
+                </button>
+                <button class="btn btn-secondary btn-lg w-100 role-btn" onclick="app.setRegisterRole('resident')">
+                    <i class="fa-solid fa-users me-2"></i> Resident
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- AUTH: ADMIN CHOICE -->
+    <div id="auth-admin-choice-screen" class="screen full-page hidden">
+        <div class="glass-panel text-center">
+            <button class="back-btn" onclick="app.authNavigate('auth-role-screen')">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <h3 class="mt-3 mb-4">Community Options</h3>
+            <button class="btn btn-primary btn-lg w-100 mb-3" onclick="app.setAdminJoinType('create')">
+                <i class="fa-solid fa-plus me-2"></i> Create Community Code
+            </button>
+            <button class="btn btn-outline btn-lg w-100" onclick="app.setAdminJoinType('join')">
+                <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Enter Existing Code
+            </button>
+        </div>
+    </div>
+
+    <!-- AUTH: REGISTER FORM -->
+    <div id="auth-register-screen" class="screen full-page hidden">
+        <div class="glass-panel text-center">
+            <button class="back-btn" id="reg-back-btn" onclick="app.authNavigateBackRegister()">
+                <i class="fa-solid fa-arrow-left"></i> Back
+            </button>
+            <h3 class="mt-3 mb-4" id="reg-title-text">Register</h3>
+            <form id="register-form" onsubmit="app.submitRegistration(event)">
+                <div class="form-group mb-3 text-start">
+                    <label>Full Name</label>
+                    <input type="text" id="reg-name" class="form-control" required>
+                </div>
+                <div class="form-group mb-3 text-start">
+                    <label>Phone Number (10 digits)</label>
+                    <input type="text" pattern="[0-9]{10}" title="Must be exactly 10 digits" id="reg-phone" class="form-control" required>
+                </div>
+                <div class="form-group mb-3 text-start" id="reg-flat-group">
+                    <label>Flat / Apartment Number</label>
+                    <input type="text" id="reg-flat" class="form-control">
+                </div>
+                <div class="form-group mb-3 text-start">
+                    <label>Email Address</label>
+                    <input type="email" id="reg-email" class="form-control" required>
+                </div>
+                <div class="form-group mb-3 text-start">
+                    <label>Create Password</label>
+                    <input type="password" id="reg-password" class="form-control" required>
+                </div>
+                <div class="form-group mb-3 text-start">
+                    <label>Confirm Password</label>
+                    <input type="password" id="reg-confirm-password" class="form-control" required>
+                </div>
+                <div class="form-group mb-4 text-start">
+                    <label id="reg-community-label">Community Code</label>
+                    <input type="text" id="reg-community-code" class="form-control" required>
+                    <small class="text-muted" id="reg-community-hint">Enter your designated code.</small>
+                </div>
+                <button type="submit" class="btn btn-primary w-100" id="reg-submit-btn">Complete Registration</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. MAIN DASHBOARD SCREEN -->
+    <div id="dashboard-screen" class="screen main-layout hidden">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <i class="fa-solid fa-city text-primary"></i>
+                <span>Smart Community</span>
+                <button class="mobile-toggle" onclick="app.toggleSidebar()">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+
+            <div class="user-profile-sm">
+                <div class="avatar"><i class="fa-solid fa-user"></i></div>
+                <div class="info">
+                    <h5 id="sidebar-user-name">Admin User</h5>
+                    <span class="role-badge" id="sidebar-user-role">Administrator</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul id="nav-menu">
+                    <!-- Nav items injected via JS based on role -->
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <button class="btn btn-danger w-100" onclick="app.logout()">
+                    <i class="fa-solid fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="main-content">
+            <!-- TOP HEADER -->
+            <header class="top-header">
+                <div class="header-left">
+                    <button class="mobile-toggle menu-btn" onclick="app.toggleSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                    <h2 id="page-title">Dashboard</h2>
+                </div>
+                <div class="header-right">
+                    <div class="notification-bell" onclick="app.navigateTo('alerts')">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="badge" id="alert-badge">3</span>
+                    </div>
+                    <div class="profile-menu">
+                        <div class="avatar" onclick="app.toggleProfileMenu()">
+                            <i class="fa-solid fa-user-circle" style="font-size: 1.8rem; margin: 0 0.75rem;"></i>
+                        </div>
+                        <div class="dropdown-menu hidden" id="profile-dropdown">
+                            <a href="#" onclick="app.openProfileModal()"><i class="fa-solid fa-user me-2"></i> View Profile</a>
+                            <a href="#" onclick="app.openPasswordModal()"><i class="fa-solid fa-lock me-2"></i> Change Password</a>
+                            <a href="#" onclick="app.openCommunityCodeModal()"><i class="fa-solid fa-hashtag me-2"></i> Community Code</a>
+                        </div>
+                    </div>
+                    <div class="date-display" id="current-date"></div>
+                </div>
+            </header>
+
+            <!-- CONTENT WRAPPER -->
+            <div class="content-wrapper">
+
+                <!-- DASHBOARD VIEW -->
+                <div id="view-dashboard" class="content-view active">
+                    <div class="welcome-banner mb-4">
+                        <div class="banner-content">
+                            <h3>Welcome back, <span id="welcome-name">Admin</span>!</h3>
+                            <p>Here is what's happening in your community today.</p>
+                        </div>
+                        <img src="https://illustrations.popsy.co/amber/freelancer.svg" alt="Welcome" class="banner-img">
+                    </div>
+
+                    <!-- APPROVAL QUEUE (Admin & Super Admin) -->
+                    <div id="approval-queue-section" class="card mb-4 admin-only">
+                        <div class="card-header">
+                            <h4><i class="fa-solid fa-users-gear me-2"></i> Pending Approvals</h4>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table mb-0">
+                                    <thead style="background: var(--gray-50);">
+                                        <tr>
+                                            <th>Role Target</th>
+                                            <th>Name</th>
+                                            <th>Contact Detail</th>
+                                            <th>Flat / Office</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="approval-queue-table">
+                                        <!-- Dynamic Content -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- STATS CARDS -->
+                    <div class="stats-grid mb-4">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-blue"><i class="fa-solid fa-clipboard-list"></i></div>
+                            <div class="stat-details">
+                                <h3>Total Complaints</h3>
+                                <h2 id="stat-total-complaints">12</h2>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-orange"><i class="fa-solid fa-clock"></i></div>
+                            <div class="stat-details">
+                                <h3>Pending</h3>
+                                <h2 id="stat-pending-complaints">5</h2>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-green"><i class="fa-solid fa-check-circle"></i></div>
+                            <div class="stat-details">
+                                <h3>Resolved</h3>
+                                <h2 id="stat-resolved-complaints">7</h2>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-purple"><i class="fa-solid fa-calendar-alt"></i></div>
+                            <div class="stat-details">
+                                <h3>Upcoming Events</h3>
+                                <h2 id="stat-upcoming-events">3</h2>
+                            </div>
+                        </div>
+                        <!-- Removed community fund stat -->
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="card dashboard-card">
+                            <div class="card-header">
+                                <h4>Recent Announcements</h4>
+                                <button class="btn btn-sm btn-outline" onclick="app.navigateTo('announcements')">View
+                                    All</button>
+                            </div>
+                            <div class="card-body">
+                                <ul class="activity-list" id="dashboard-announcements">
+                                    <!-- Injected -->
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="card dashboard-card" style="grid-column: 1 / -1;">
+                            <div class="card-header">
+                                <h4>Priority-wise Complaints List</h4>
+                                <button class="btn btn-sm btn-outline" onclick="app.navigateTo('complaints')">View
+                                    Chat</button>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Priority</th>
+                                                <th>Resident Information</th>
+                                                <th>Complaint Message</th>
+                                                <th>Admin Responses</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dashboard-complaints-table">
+                                            <!-- Dynamic Priority Ranked Complaints -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMPLAINTS CHAT VIEW -->
+                <div id="view-complaints" class="content-view hidden">
+                    <div class="chat-wrapper mx-auto" style="max-width: 900px;">
+                        
+                        <div class="chat-header-info resident-only">
+                            <strong>Note:</strong> Complaints should be raised using proper, positive language with clear details. 
+                            A pale green color indicates that a complaint has been resolved. A white color indicates that a complaint is under review or pending. 
+                            The 👍 emoji indicates the number of votes a complaint has received.
+                        </div>
+                        <div class="chat-header-info admin-only">
+                            <strong>Note:</strong> Respond to complaints quickly, clearly, and with patience, using positive language. 
+                            A pale green color indicates that a complaint has been resolved. A white color indicates that a complaint is under review or pending. 
+                            The 👍 emoji indicates the number of votes a complaint has received.
+                        </div>
+
+                        <div class="chat-messages" id="complaint-chat-list">
+                            <!-- Dynamic Chat Bubbles Generated Here -->
+                        </div>
+
+                        <div class="chat-input-area">
+                            <div id="reply-target-badge" class="replying-badge hidden">
+                                <span>Replying to <strong id="reply-target-name"></strong></span>
+                                <span class="reply-close" onclick="app.cancelReply()"><i class="fa-solid fa-times"></i></span>
+                            </div>
+                            <input type="hidden" id="chat-reply-id" value="">
+                            <input type="text" id="chat-input-text" placeholder="Type your message..." onkeypress="if(event.key === 'Enter') app.sendChatMessage()">
+                            <button onclick="app.sendChatMessage()">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- ANNOUNCEMENTS VIEW -->
+                <div id="view-announcements" class="content-view hidden">
+                    <div class="header-with-action mb-4">
+                        <h3>Community Announcements</h3>
+                        <button class="btn btn-primary admin-only" onclick="app.showAddAnnouncementModal()"><i
+                                class="fa-solid fa-plus"></i> New Announcement</button>
+                    </div>
+
+                    <div class="announcements-grid" id="announcements-container">
+                        <!-- Dynamic -->
+                    </div>
+                </div>
+
+                <!-- EVENTS VIEW -->
+                <div id="view-events" class="content-view hidden">
+                    <div class="header-with-action mb-4">
+                        <h3>Community Events</h3>
+                        <button class="btn btn-primary admin-only" onclick="app.showAddEventModal()"><i
+                                class="fa-solid fa-plus"></i> Add Event</button>
+                    </div>
+
+                    <div class="events-grid" id="events-container">
+                        <!-- Dynamic -->
+                    </div>
+
+                    <div id="superadmin-events-list" class="card p-4 mt-4 superadmin-only">
+                        <h4 class="mb-3">Registered Members for Events</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Resident Name</th>
+                                        <th>Flat Number</th>
+                                        <th>Event Name</th>
+                                        <th>Date of Registration</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="event-registrations-table">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FUND MANAGEMENT VIEW -->
+                <!-- FUND MANAGEMENT VIEW -->
+                <div id="view-funds" class="content-view hidden">
+                    <div class="header-with-action mb-4">
+                        <h3>Fund Management</h3>
+                        <button class="btn btn-primary resident-only" onclick="app.showAddPaymentModal()"><i class="fa-solid fa-file-invoice-dollar mt-1"></i> Submit Payment Details</button>
+                    </div>
+
+                    <div class="card p-4 mb-4" id="fund-description-box">
+                        <div class="header-with-action mb-3">
+                            <h4>Fund Information</h4>
+                            <button class="btn btn-outline btn-sm admin-only" onclick="app.showEditFundDescriptionModal()"><i class="fa-solid fa-pen"></i> Edit Description</button>
+                        </div>
+                        <p id="fund-description-text" class="text-muted" style="white-space: pre-line;">No description provided yet.</p>
+                    </div>
+
+                    <div class="card p-4 mb-4 admin-only">
+                        <div class="header-with-action mb-3">
+                            <h4>Payment QR Codes</h4>
+                            <button class="btn btn-outline btn-sm" onclick="app.showAddQRModal()"><i class="fa-solid fa-plus"></i> Upload QR Code</button>
+                        </div>
+                        <div class="qr-grid" id="qr-codes-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                            <!-- Active QRs -->
+                        </div>
+                    </div>
+
+                    <div class="card p-4 mb-4 resident-only">
+                        <div class="header-with-action mb-3">
+                            <h4>Available Payment QRs</h4>
+                        </div>
+                        <div class="qr-grid" id="resident-qr-codes-container" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                            <!-- Active QRs for users -->
+                        </div>
+                    </div>
+
+                    <div class="card p-4">
+                        <div class="header-with-action mb-3">
+                            <h4>Recent Transactions</h4>
+                            <button class="btn btn-outline"><i class="fa-solid fa-download"></i> Download Report</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Resident</th>
+                                        <th>Flat</th>
+                                        <th>Amount</th>
+                                        <th>Txn ID</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transactions-table">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ALERTS VIEW -->
+                <div id="view-alerts" class="content-view hidden">
+                    <div class="header-with-action mb-4">
+                        <h3><i class="fa-solid fa-triangle-exclamation text-red me-2"></i> Emergency Alerts</h3>
+                        <button class="btn btn-danger" onclick="app.triggerAlert()"><i class="fa-solid fa-bullhorn"></i>
+                            Create Alert</button>
+                    </div>
+
+                    <div class="alerts-container" id="alerts-container">
+                        <!-- Dynamic -->
+                    </div>
+                </div>
+
+                <!-- DIRECTORY VIEW -->
+                <div id="view-directory" class="content-view hidden">
+                    <h3>Directory</h3>
+                    <div class="card p-4 mt-3">
+                        <div class="search-box mb-4">
+                            <input type="text" class="form-control" placeholder="Search by name or flat number..."
+                                onkeyup="app.searchDirectory(this.value)">
+                        </div>
+
+                        <div id="super-admins-dir-container" class="mb-4">
+                            <h4 class="mb-3">Super Admin Directory</h4>
+                            <div class="table-responsive pb-2">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Office/Flat</th>
+                                            <th>Contact Info</th>
+                                            <th>Status</th>
+                                            <th>Role</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="directory-superadmins-table"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="admins-dir-container" class="mb-4 border-top pt-4">
+                            <div class="header-with-action mb-3">
+                                <h4>Admins Directory</h4>
+                                <button class="btn btn-outline btn-sm superadmin-only" onclick="app.showAddAdminModal()"><i class="fa-solid fa-plus"></i> Add Admin</button>
+                            </div>
+                            <div class="table-responsive pb-2">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Office/Flat</th>
+                                            <th>Contact Info</th>
+                                            <th>Status</th>
+                                            <th>Role</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="directory-admins-table"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div id="residents-dir-container" class="admin-only border-top pt-4">
+                            <h4 class="mb-3">Residents Directory</h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Flat No</th>
+                                            <th>Contact Info</th>
+                                            <th>Move-in Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="directory-residents-table"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTACT & SUPPORT VIEW -->
+                <div id="view-contact" class="content-view hidden">
+                    <div class="header-with-action mb-4">
+                        <h3>Contact Administration</h3>
+                        <button class="btn btn-primary admin-only" onclick="app.showAddContactModal()"><i
+                                class="fa-solid fa-plus"></i> Add Contact Info</button>
+                    </div>
+                    <div class="contact-grid" id="contact-container"
+                        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                        <!-- Dynamic Contacts -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD ANNOUNCEMENT -->
+    <div class="modal-overlay" id="modal-announcement">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-ann-title-text">New Announcement</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-announcement')"><i
+                        class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-announcement" onsubmit="app.addAnnouncement(event)">
+                    <input type="hidden" id="ann-id">
+                    <div class="form-group mb-3">
+                        <label>Title</label>
+                        <input type="text" id="ann-title" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Description</label>
+                        <textarea id="ann-desc" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="btn-submit-ann">Publish Announcement</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD EVENT -->
+    <div class="modal-overlay" id="modal-event">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-evt-title-text">Create Event</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-event')"><i
+                        class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-event" onsubmit="app.addEvent(event)">
+                    <input type="hidden" id="evt-id">
+                    <div class="form-group mb-3">
+                        <label>Event Name</label>
+                        <input type="text" id="evt-name" class="form-control" required>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group mb-3">
+                            <label>Date</label>
+                            <input type="date" id="evt-date" class="form-control" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Time</label>
+                            <input type="time" id="evt-time" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Location</label>
+                        <input type="text" id="evt-location" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Description</label>
+                        <textarea id="evt-desc" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group mb-3" style="display:flex; align-items:center; gap:0.5rem;">
+                        <input type="checkbox" id="evt-show-reg" checked>
+                        <label for="evt-show-reg" style="margin-bottom:0; font-weight: normal;">Display Register Button for Residents</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="btn-submit-evt">Create Event</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL: ADD/EDIT CONTACT -->
+    <div class="modal-overlay" id="modal-contact">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-contact-title">Add Contact Info</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-contact')"><i
+                        class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-contact" onsubmit="app.saveContact(event)">
+                    <input type="hidden" id="contact-id">
+                    <div class="form-group mb-3">
+                        <label>Title</label>
+                        <input type="text" id="contact-title" class="form-control" required
+                            placeholder="e.g. Email Support">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Information</label>
+                        <textarea id="contact-info" class="form-control" rows="3" required
+                            placeholder="Details..."></textarea>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Icon (FontAwesome Class)</label>
+                        <input type="text" id="contact-icon" class="form-control" value="fa-circle-info" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Save Contact Info</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: EDIT FUND DESCRIPTION -->
+    <div class="modal-overlay" id="modal-fund-desc">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Fund Information</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-fund-desc')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-fund-desc" onsubmit="app.saveFundDescription(event)">
+                    <div class="form-group mb-3">
+                        <label>Description</label>
+                        <textarea id="fund-desc-input" class="form-control" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Save Description</button>
+                    <button type="button" class="btn btn-danger w-100 mt-2" onclick="app.deleteFundDescription()">Delete Description</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD QR CODE -->
+    <div class="modal-overlay" id="modal-qr-upload">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Upload QR Code</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-qr-upload')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-qr-upload" onsubmit="app.uploadQRCode(event)">
+                    <div class="form-group mb-3">
+                        <label>QR Code Image URL / File</label>
+                        <input type="file" id="qr-file-input" class="form-control" accept="image/*" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Serial Number (Optional)</label>
+                        <input type="text" id="qr-serial-input" class="form-control" placeholder="Leave blank to auto-generate">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Upload QR Code</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SUBMIT PAYMENT DETAILS -->
+    <div class="modal-overlay" id="modal-payment-submit">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Submit Payment Details</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-payment-submit')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-payment-submit" onsubmit="app.submitPaymentDetails(event)">
+                    <div class="grid-2">
+                        <div class="form-group mb-3">
+                            <label>Resident Name</label>
+                            <input type="text" id="pay-name" class="form-control" required readonly>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Flat Number</label>
+                            <input type="text" id="pay-flat" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group mb-3">
+                            <label>Date</label>
+                            <input type="date" id="pay-date" class="form-control" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Category</label>
+                            <select id="pay-category" class="form-control" required>
+                                <option value="Maintenance">Maintenance</option>
+                                <option value="Event">Event Fee</option>
+                                <option value="Donation">Donation</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="form-group mb-3">
+                            <label>QR Serial Number</label>
+                            <select id="pay-qr-serial" class="form-control" required>
+                                <!-- Injected -->
+                            </select>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label>Amount</label>
+                            <input type="number" id="pay-amount" class="form-control" required min="1">
+                        </div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Transaction ID</label>
+                        <input type="text" id="pay-txn-id" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Upload Payment Screenshot</label>
+                        <input type="file" id="pay-screenshot" class="form-control" accept="image/*" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Submit Details</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD ADMIN -->
+    <div class="modal-overlay" id="modal-add-admin">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Admin</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-add-admin')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-add-admin" onsubmit="app.submitAddAdmin(event)">
+                    <div class="form-group mb-3">
+                        <label>Admin Name</label>
+                        <input type="text" id="admin-name" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Office / Flat</label>
+                        <input type="text" id="admin-flat" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Contact Info (Email / Phone)</label>
+                        <input type="text" id="admin-contact" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Create Admin Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL: VIEW / EDIT PROFILE -->
+    <div class="modal-overlay" id="modal-view-profile">
+        <div class="modal-content" style="max-width: 450px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-user"></i> My Profile</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-view-profile')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-profile" onsubmit="app.saveProfileEdits(event)">
+                    <div class="form-group mb-3">
+                        <label>Full Name</label>
+                        <input type="text" id="prof-name" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3 resident-prof-only">
+                        <label>Flat Number</label>
+                        <input type="text" id="prof-flat" class="form-control">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Phone Number</label>
+                        <input type="tel" id="prof-phone" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label>Email Address</label>
+                        <input type="email" id="prof-email" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="prof-submit-btn">Save Changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: CHANGE PASSWORD -->
+    <div class="modal-overlay" id="modal-change-password">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-lock"></i> Change Password</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-change-password')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-password" onsubmit="app.changePassword(event)">
+                    <div class="form-group mb-3">
+                        <label>Previous Password</label>
+                        <input type="password" id="pwd-old" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>New Password</label>
+                        <input type="password" id="pwd-new" class="form-control" required>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label>Confirm Password</label>
+                        <input type="password" id="pwd-confirm" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Save Password</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: COMMUNITY CODE -->
+    <div class="modal-overlay" id="modal-community-code">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-hashtag"></i> Community Code</h3>
+                <button class="close-btn" onclick="app.closeModal('modal-community-code')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="text-muted mb-3" id="comm-code-desc">This is your secure community access code.</p>
+                <div class="p-3 mb-4" style="background: var(--gray-50); border: 2px dashed var(--gray-300); border-radius: 8px;">
+                    <h2 class="mb-0 text-primary" id="comm-code-display" style="letter-spacing: 2px;">SMART2026</h2>
+                </div>
+                
+                <!-- Admin Edit Section -->
+                <div id="comm-code-admin-section" class="hidden" style="border-top: 1px solid var(--gray-200); padding-top: 1rem;">
+                    <form id="form-comm-code" onsubmit="app.updateCommunityCode(event)">
+                        <div class="form-group mb-3 text-start">
+                            <label>New Community Code</label>
+                            <input type="text" id="comm-code-input" class="form-control" placeholder="Enter new code" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100"><i class="fa-solid fa-save"></i> Change Community Code</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
