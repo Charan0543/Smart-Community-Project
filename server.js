@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const port = 5000;
+const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
@@ -199,6 +199,7 @@ app.delete('/api/data/:type/:id', (req, res) => {
     res.json({ success: true, message: 'Deleted successfully.' });
 });
 
-app.listen(port, () => {
-    console.log(`Smart JSON Express live at http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Smart JSON Express live at http://localhost:${PORT}`);
 });
+
